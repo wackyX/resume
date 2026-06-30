@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="王欣 - Java 后端开发工程师 / AI 应用开发工程师，8 年后端经验，聚焦 AI 应用落地、NL2SQL、集团级业务系统交付。">
+  <meta name="theme-color" content="#060914">
+  <title>王欣 | Java 后端 & AI 应用开发</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050711;
+      --bg-2: #0a0f1d;
+      --panel: rgba(10, 15, 29, 0.84);
+      --panel-solid: #0b1020;
+      --line: rgba(162, 196, 255, 0.13);
+      --line-strong: rgba(162, 196, 255, 0.28);
+      --text: #f4f7ff;
+      --muted: #a4afc4;
+      --soft: #6f7b94;
+      --accent: #6aa7ff;
+      --accent-2: rgba(106, 167, 255, 0.12);
+      --danger: #ff7c6f;
+      --shadow: 0 28px 90px rgba(0, 0, 0, 0.62);
+      --radius: 18px;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(106, 167, 255, 0.1), transparent 28%),
+        radial-gradient(circle at 86% 6%, rgba(142, 118, 255, 0.07), transparent 22%),
+        linear-gradient(135deg, var(--bg), #070a12 48%, #02030a);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(115deg, transparent 0 44%, rgba(106, 167, 255, 0.08) 49%, transparent 55%),
+        radial-gradient(circle at 50% 50%, rgba(142, 118, 255, 0.08), transparent 38%);
+      transform: rotate(-8deg);
+      animation: drift 18s linear infinite;
+    }
+
+    body.light {
+      color-scheme: light;
+      --bg: #f2f5fb;
+      --bg-2: #e8edf7;
+      --panel: rgba(255, 255, 255, 0.76);
+      --panel-solid: #ffffff;
+      --line: rgba(23, 43, 77, 0.14);
+      --line-strong: rgba(23, 43, 77, 0.28);
+      --text: #101522;
+      --muted: #3f4c63;
+      --soft: #68758d;
+      --accent: #266fd8;
+      --accent-2: rgba(38, 111, 216, 0.12);
+      --shadow: 0 22px 70px rgba(23, 43, 77, 0.14);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(38, 111, 216, 0.13), transparent 30%),
+        radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.72), transparent 24%),
+        linear-gradient(135deg, var(--bg), #f8faff 56%, #e6edf8);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0.13;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(5, 7, 17, 0.88);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .light .nav {
+      background: rgba(242, 245, 251, 0.78);
+    }
+
+    .nav-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--bg);
+      background: var(--accent);
+      font-weight: 900;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 16px 50px rgba(106, 167, 255, 0.16);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+      min-width: 0;
+    }
+
+    .brand-text strong {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .brand-text span {
+      color: var(--muted);
+      font: 12px var(--mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a,
+    .ghost-button,
+    .primary-button {
+      min-height: 40px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+      white-space: nowrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a:hover,
+    .ghost-button:hover {
+      color: var(--text);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateY(-1px);
+    }
+
+    .light .nav-links a:hover,
+    .light .ghost-button:hover {
+      background: rgba(38, 111, 216, 0.06);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ghost-button {
+      color: var(--text);
+      background: transparent;
+      border-color: var(--line);
+      cursor: pointer;
+    }
+
+    .primary-button {
+      color: var(--bg);
+      background: var(--accent);
+      border-color: var(--accent);
+      font-weight: 800;
+      box-shadow: 0 18px 50px rgba(106, 167, 255, 0.16);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .primary-button:active,
+    .ghost-button:active,
+    .nav-links a:active {
+      transform: translateY(1px);
+    }
+
+    .hero {
+      min-height: calc(100dvh - 68px);
+      display: grid;
+      grid-template-columns: minmax(0, 0.94fr) minmax(360px, 0.86fr);
+      gap: clamp(28px, 5vw, 78px);
+      align-items: center;
+      padding: 44px 0 66px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font: 700 12px/1.4 var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      position: relative;
+      margin-bottom: 18px;
+      font-size: clamp(42px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      max-width: 680px;
+    }
+
+    h1::after {
+      content: attr(data-glitch);
+      position: absolute;
+      inset: 0;
+      color: rgba(106, 167, 255, 0.36);
+      clip-path: inset(0 0 62% 0);
+      transform: translateX(0);
+      opacity: 0;
+      pointer-events: none;
+      animation: glitch-in 1.25s steps(2, end) 280ms 1;
+    }
+
+    .accent-text {
+      color: var(--accent);
+      display: inline-block;
+      text-shadow: 0 0 32px rgba(106, 167, 255, 0.28);
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .hero-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .contact-line {
+      color: var(--soft);
+      font: 13px var(--mono);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 28px;
+      max-width: 720px;
+    }
+
+    .metric {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.018);
+      min-height: 108px;
+      overflow: hidden;
+    }
+
+    .light .metric {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--text);
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      margin-top: 9px;
+      font-size: 13px;
+    }
+
+    .visual-wrap {
+      position: relative;
+      min-height: 560px;
+      border-radius: calc(var(--radius) + 10px);
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 28%),
+        var(--panel);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .visual-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 95%, rgba(106, 167, 255, 0.13) 100%),
+        linear-gradient(180deg, transparent 95%, rgba(106, 167, 255, 0.1) 100%);
+      background-size: 34px 34px;
+      opacity: 0.26;
+      z-index: -1;
+    }
+
+    .visual-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, transparent 0 42%, rgba(106, 167, 255, 0.12) 50%, transparent 58%),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.08));
+      mix-blend-mode: screen;
+      opacity: 0.42;
+      transform: translateY(-42%);
+      animation: scan 5.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+
+    #flowCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .code-panel {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(2, 4, 12, 0.84);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 16px;
+      font: 12px/1.75 var(--mono);
+      color: #e9f0ff;
+    }
+
+    .code-panel::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: 10px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(106, 167, 255, 0.9), transparent);
+      opacity: 0.7;
+    }
+
+    .light .code-panel {
+      color: #101522;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .code-panel .dim {
+      color: var(--soft);
+    }
+
+    .code-panel .ok {
+      color: var(--accent);
+    }
+
+    .visual-title {
+      position: absolute;
+      left: 22px;
+      top: 22px;
+      right: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text);
+      font: 13px var(--mono);
+    }
+
+    .pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 8px var(--accent-2);
+      animation: pulse 1.7s ease-in-out infinite;
+      flex: 0 0 auto;
+    }
+
+    section {
+      padding: 74px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      margin-bottom: 14px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 68ch;
+    }
+
+    .capability-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr 1fr;
+      grid-auto-rows: minmax(210px, auto);
+      gap: 14px;
+    }
+
+    .tile {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      background: var(--panel);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+      overflow: hidden;
+    }
+
+    .metric,
+    .tile,
+    .job,
+    .project,
+    .tool,
+    .contact-card,
+    .visual-wrap {
+      --mx: 50%;
+      --my: 50%;
+    }
+
+    .metric::after,
+    .tile::after,
+    .job::after,
+    .project::after,
+    .tool::after,
+    .contact-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      background: radial-gradient(circle at var(--mx) var(--my), rgba(106, 167, 255, 0.18), transparent 34%);
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .metric:hover::after,
+    .tile:hover::after,
+    .job:hover::after,
+    .project:hover::after,
+    .tool:hover::after,
+    .contact-card:hover::after {
+      opacity: 1;
+    }
+
+    .tile.large {
+      grid-row: span 2;
+      min-height: 438px;
+    }
+
+    .tile.visual {
+      background:
+        radial-gradient(circle at 76% 20%, rgba(106, 167, 255, 0.09), transparent 36%),
+        linear-gradient(145deg, rgba(106, 167, 255, 0.06), rgba(255, 255, 255, 0.014)),
+        var(--panel);
+    }
+
+    .tile h3 {
+      font-size: 22px;
+      line-height: 1.22;
+      margin-bottom: 10px;
+    }
+
+    .tile p {
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.035);
+      padding: 8px 10px;
+      font: 12px var(--mono);
+    }
+
+    .light .chip {
+      background: rgba(38, 111, 216, 0.05);
+    }
+
+    .stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stack-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stack-row strong {
+      color: var(--text);
+      font-family: var(--mono);
+      font-weight: 700;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .timeline-side {
+      position: sticky;
+      top: 92px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      background: var(--panel);
+    }
+
+    .timeline-side p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .job-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .job {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .job header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+
+    .job h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .job time {
+      color: var(--accent);
+      font: 12px var(--mono);
+      white-space: nowrap;
+      padding-top: 5px;
+    }
+
+    .job ul,
+    .project ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .job li,
+    .project li {
+      margin: 8px 0;
+    }
+
+    .project-board {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .project {
+      grid-column: span 6;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 24px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project.featured {
+      grid-column: span 7;
+    }
+
+    .project.compact {
+      grid-column: span 5;
+    }
+
+    .project-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .project h3 {
+      margin-bottom: 8px;
+      font-size: 25px;
+      line-height: 1.18;
+    }
+
+    .project p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .tag {
+      color: var(--bg);
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font: 700 11px var(--mono);
+      white-space: nowrap;
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .node {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 13px 10px;
+      color: var(--muted);
+      font: 12px var(--mono);
+      background: rgba(255, 255, 255, 0.016);
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+    }
+
+    .node.hot {
+      color: var(--text);
+      background: var(--accent-2);
+      border-color: rgba(106, 167, 255, 0.3);
+    }
+
+    .toolbelt {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .tool {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.018);
+      min-height: 104px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .light .tool {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .tool strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .tool span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .contact-card {
+      position: relative;
+      border: 1px solid var(--line-strong);
+      border-radius: calc(var(--radius) + 8px);
+      padding: clamp(24px, 5vw, 48px);
+      background:
+        radial-gradient(circle at 88% 20%, var(--accent-2), transparent 26%),
+        var(--panel);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 26px;
+      align-items: center;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .contact-card p {
+      color: var(--muted);
+      max-width: 66ch;
+    }
+
+    .contact-box {
+      display: grid;
+      gap: 10px;
+      font-family: var(--mono);
+      color: var(--muted);
+      border-left: 1px solid var(--line);
+      padding-left: 24px;
+    }
+
+    .contact-box a {
+      color: var(--text);
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      padding: 26px 0 42px;
+      color: var(--soft);
+      font: 12px var(--mono);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 680ms cubic-bezier(0.16, 1, 0.3, 1), transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(0.92);
+        opacity: 0.72;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    @keyframes scan {
+      0% {
+        transform: translateY(-56%);
+      }
+      54%, 100% {
+        transform: translateY(56%);
+      }
+    }
+
+    @keyframes drift {
+      0% {
+        transform: rotate(-8deg) translate3d(-2%, -1%, 0);
+      }
+      50% {
+        transform: rotate(-8deg) translate3d(2%, 1%, 0);
+      }
+      100% {
+        transform: rotate(-8deg) translate3d(-2%, -1%, 0);
+      }
+    }
+
+    @keyframes glitch-in {
+      0% {
+        opacity: 0;
+        transform: translateX(0);
+        clip-path: inset(0 0 76% 0);
+      }
+      12% {
+        opacity: 1;
+        transform: translateX(7px);
+        clip-path: inset(8% 0 58% 0);
+      }
+      24% {
+        transform: translateX(-5px);
+        clip-path: inset(48% 0 20% 0);
+      }
+      36% {
+        transform: translateX(3px);
+        clip-path: inset(20% 0 44% 0);
+      }
+      48%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      body::before,
+      .visual-wrap::after {
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 1020px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .visual-wrap {
+        min-height: 480px;
+      }
+
+      .metrics,
+      .toolbelt {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .capability-grid,
+      .timeline,
+      .contact-card {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-side {
+        position: relative;
+        top: auto;
+      }
+
+      .project,
+      .project.featured,
+      .project.compact {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .nav-inner {
+        height: auto;
+        min-height: 64px;
+        padding: 10px 0;
+      }
+
+      .brand-text span {
+        max-width: 160px;
+      }
+
+      .actions .ghost-button {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 42px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 10.6vw, 46px);
+      }
+
+      h1::after {
+        display: none;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+
+      .toolbelt,
+      .diagram {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .metric {
+        min-height: 96px;
+        padding: 14px;
+      }
+
+      .visual-wrap {
+        min-height: 430px;
+      }
+
+      .code-panel {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        padding: 13px;
+        font-size: 11px;
+      }
+
+      section {
+        padding: 54px 0;
+      }
+
+      .job header,
+      .project-top {
+        flex-direction: column;
+      }
+
+      .job time {
+        padding-top: 0;
+      }
+
+      .contact-box {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+        padding-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <nav class="nav">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="回到顶部">
+        <span class="mark">W</span>
+        <span class="brand-text">
+          <strong>王欣</strong>
+          <span>Java Backend / AI Application</span>
+        </span>
+      </a>
+      <div class="nav-links" aria-label="页面导航">
+        <a href="#capability">能力</a>
+        <a href="#projects">项目</a>
+        <a href="#experience">经历</a>
+        <a href="#stack">技术栈</a>
+      </div>
+      <div class="actions">
+        <button class="ghost-button" id="themeToggle" type="button" aria-label="切换明暗主题">主题</button>
+        <a class="primary-button" href="mailto:wackyx0107@gmail.com">联系我</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <div class="shell hero">
+      <div class="hero-content reveal">
+        <p class="eyebrow">AI 应用落地型后端开发</p>
+        <h1 data-glitch="业务系统开发，AI 工作流落地">业务系统开发，<span class="accent-text">AI 工作流落地</span></h1>
+        <p class="hero-copy">8 年后端经验，聚焦 Java 工程、NL2SQL、Agent、工作流编排和集团级系统交付。</p>
+        <div class="hero-row">
+          <a class="primary-button" href="#projects">查看项目</a>
+          <button class="ghost-button" type="button" id="copyContact">复制联系方式</button>
+          <span class="contact-line">杭州 / 19357084608 / CET-4</span>
+        </div>
+        <div class="metrics" aria-label="核心数据">
+          <div class="metric">
+            <strong>8年</strong>
+            <span>后端开发经验</span>
+          </div>
+          <div class="metric">
+            <strong>200家</strong>
+            <span>院区业务覆盖</span>
+          </div>
+          <div class="metric">
+            <strong>5人</strong>
+            <span>小团队统筹</span>
+          </div>
+          <div class="metric">
+            <strong>5亿</strong>
+            <span>用户数据规模经历</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual-wrap reveal" aria-label="AI 工作流动态视觉">
+        <canvas id="flowCanvas"></canvas>
+        <div class="visual-title">
+          <span>NL2SQL workflow running</span>
+          <span class="pulse" aria-hidden="true"></span>
+        </div>
+        <div class="code-panel" aria-label="工作流代码片段">
+          <div><span class="dim">question</span> = "查询本月会员卡预约转化"</div>
+          <div><span class="dim">flow</span> = enhance() + retrieve_schema() + generate_sql()</div>
+          <div><span class="dim">guard</span> = only_select(sql) && timeout(30s)</div>
+          <div><span class="ok">render</span> = mysql_mcp.query(sql).to_echarts_json()</div>
+        </div>
+      </div>
+    </div>
+
+    <section id="capability">
+      <div class="shell">
+        <div class="section-head reveal">
+          <h2>不是只会写接口，而是能把场景推到上线</h2>
+          <p>后端工程、AI 能力接入和项目推进放在同一条链路里处理，适合需要业务理解和交付结果的团队。</p>
+        </div>
+        <div class="capability-grid">
+          <article class="tile large visual reveal">
+            <h3>AI 应用落地</h3>
+            <p>围绕智能问数、NL2SQL、Agent、MCP 查询和 ECharts 自动渲染，把大模型能力落到真实业务流程。</p>
+            <div class="stack">
+              <div class="stack-row"><span>语义增强</span><strong>DeepSeek</strong></div>
+              <div class="stack-row"><span>数据查询</span><strong>MySQL MCP</strong></div>
+              <div class="stack-row"><span>可视化</span><strong>ECharts JSON</strong></div>
+              <div class="stack-row"><span>安全控制</span><strong>SELECT only</strong></div>
+            </div>
+          </article>
+          <article class="tile reveal">
+            <h3>Java 后端</h3>
+            <p>Spring Boot、Spring Cloud、MyBatis 体系下的业务接口、数据模型、权限控制和线上排查。</p>
+            <div class="chips">
+              <span class="chip">Spring Boot</span>
+              <span class="chip">Spring Cloud</span>
+              <span class="chip">MyBatis-Plus</span>
+              <span class="chip">Redis</span>
+            </div>
+          </article>
+          <article class="tile reveal">
+            <h3>项目统筹</h3>
+            <p>兼任项目经理，做计划、拆任务、跟进度、协调产品前端测试，带过 5 人小团队。</p>
+            <div class="chips">
+              <span class="chip">需求讨论</span>
+              <span class="chip">排期拆解</span>
+              <span class="chip">风险推进</span>
+            </div>
+          </article>
+          <article class="tile reveal">
+            <h3>业务系统</h3>
+            <p>服务医疗、维修、电商、内容平台等业务，覆盖订单、工单、资产、预约、广告投放等模块。</p>
+            <div class="chips">
+              <span class="chip">订单</span>
+              <span class="chip">工单</span>
+              <span class="chip">权限隔离</span>
+              <span class="chip">定时任务</span>
+            </div>
+          </article>
+          <article class="tile visual reveal">
+            <h3>高数据量经验</h3>
+            <p>参与近 5 亿用户数据规模下的投放监控、转化回传、归因统计和异步削峰处理。</p>
+            <div class="chips">
+              <span class="chip">RabbitMQ</span>
+              <span class="chip">MySQL</span>
+              <span class="chip">Redis</span>
+              <span class="chip">归因回传</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="shell">
+        <div class="section-head reveal">
+          <h2>最能代表当前能力的两个项目</h2>
+          <p>一个证明 AI 应用落地，一个证明集团级复杂业务系统交付。两者都不是演示项目。</p>
+        </div>
+        <div class="project-board">
+          <article class="project featured reveal">
+            <div class="project-top">
+              <div>
+                <h3>智能问数系统 / NL2SQL 数据分析平台</h3>
+                <p>面向内部运营和院区管理，用户用自然语言提问，系统生成 SQL、查询同步库并自动渲染图表。</p>
+              </div>
+              <span class="tag">AI 项目</span>
+            </div>
+            <ul>
+              <li>负责核心工作流开发，覆盖语义增强、知识库检索、SQL 生成、校验、执行和图表渲染。</li>
+              <li>接入 DeepSeek，实现自然语言到 MySQL 查询语句的转换。</li>
+              <li>仅允许 SELECT 查询，使用生产库同步数据，敏感字段在同步阶段过滤。</li>
+              <li>支持 SQL 执行失败后的自动修正与重试，增加工作流超时保护。</li>
+              <li>将查询结果转为 ECharts 标准 JSON，并根据数据结构自动选择图表类型。</li>
+            </ul>
+            <div class="diagram" aria-label="智能问数链路">
+              <div class="node hot">语义增强</div>
+              <div class="node">知识库检索</div>
+              <div class="node hot">NL2SQL</div>
+              <div class="node">SQL 校验</div>
+              <div class="node hot">MCP 查询</div>
+              <div class="node">ECharts 渲染</div>
+            </div>
+          </article>
+
+          <article class="project compact reveal">
+            <div class="project-top">
+              <div>
+                <h3>集团后勤信息化系统</h3>
+                <p>面向总部及近 200 家院区，覆盖资产、会议室、巡检、访客停车、维修工单等后勤场景。</p>
+              </div>
+              <span class="tag">交付项目</span>
+            </div>
+            <ul>
+              <li>兼任项目经理，推进 1 名产品、2 名后端、2 名前端、1 名测试协作。</li>
+              <li>参与方案制定和核心后端开发，技术栈为 Java、PostgreSQL、Redis、XXL-JOB。</li>
+              <li>设计按院区维度的数据隔离与权限控制，支持总部和院区不同角色访问边界。</li>
+              <li>实现预约时间冲突校验、资产标签规则、工单流转机制和巡检任务定时生成。</li>
+              <li>通过接口对接地下立方停车系统，打通访客预约与停车业务流程。</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="shell timeline">
+        <aside class="timeline-side reveal">
+          <h2>经验曲线</h2>
+          <p>从 PHP 业务系统、广告投放与大数据量处理，逐步转向 Java 后端、集团系统交付和 AI 应用落地。</p>
+        </aside>
+        <div class="job-list">
+          <article class="job reveal">
+            <header>
+              <h3>通策医疗 / 软件中心 / 后端开发</h3>
+              <time>2022.04 - 至今</time>
+            </header>
+            <ul>
+              <li>负责集团内部业务系统 Java 后端开发，参与需求评审、技术方案设计、接口开发和上线交付。</li>
+              <li>参与 AI 应用落地开发，围绕智能问数、NL2SQL、Agent 和工作流编排推进业务结合。</li>
+              <li>参与项目架构设计与技术选型，负责线上问题排查、系统维护和日常功能迭代。</li>
+            </ul>
+          </article>
+          <article class="job reveal">
+            <header>
+              <h3>闪修侠 / PHP 开发工程师</h3>
+              <time>2021.04 - 2022.03</time>
+            </header>
+            <ul>
+              <li>负责客服工单系统和后台订单系统开发，支撑订单流转、客服处理和售后协同。</li>
+              <li>基于 Swoft2 完成业务接口开发，接入品胜订单系统，实现第三方订单自动接单。</li>
+            </ul>
+          </article>
+          <article class="job reveal">
+            <header>
+              <h3>悠书网络科技 / PHP 开发工程师</h3>
+              <time>2019.03 - 2021.02</time>
+            </header>
+            <ul>
+              <li>负责小说后台、渠道商运营后台、自动化投放系统和免费看书小程序开发。</li>
+              <li>对接百度、广点通、抖音、爱奇艺等广告主，实现投放监控、转化回传和归因统计。</li>
+              <li>参与近 5 亿用户数据规模下的数据处理，使用 RabbitMQ 做统计与回传削峰填谷。</li>
+              <li>支撑自动化投放系统首月约 600 万投放消耗的数据监控与归因处理。</li>
+            </ul>
+          </article>
+          <article class="job reveal">
+            <header>
+              <h3>杭州聚货易购 / PHP 开发工程师</h3>
+              <time>2018.08 - 2019.02</time>
+            </header>
+            <ul>
+              <li>参与电商后台商品、订单、用户等基础模块迭代，积累 Web 后端开发和团队协作经验。</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <div class="shell">
+        <div class="section-head reveal">
+          <h2>技术栈不是标签，是能拼出交付链路的积木</h2>
+          <p>语言、框架、中间件、AI 模型和工程实践都围绕业务上线服务。</p>
+        </div>
+        <div class="toolbelt">
+          <div class="tool reveal"><strong>后端语言</strong><span>Java、PHP，了解 Go 脚本开发</span></div>
+          <div class="tool reveal"><strong>Java 框架</strong><span>Spring Boot、Spring Cloud、MyBatis/MyBatis-Plus</span></div>
+          <div class="tool reveal"><strong>数据库</strong><span>MySQL、PostgreSQL、Redis</span></div>
+          <div class="tool reveal"><strong>中间件</strong><span>RabbitMQ、Nacos、XXL-JOB、Docker</span></div>
+          <div class="tool reveal"><strong>AI 模型</strong><span>DeepSeek、OpenAI API、通义千问、Claude</span></div>
+          <div class="tool reveal"><strong>AI 工程</strong><span>Agent、NL2SQL、MCP、工作流编排</span></div>
+          <div class="tool reveal"><strong>工程能力</strong><span>接口设计、数据库设计、权限控制、线上排查</span></div>
+          <div class="tool reveal"><strong>项目能力</strong><span>需求沟通、方案设计、任务拆解、进度跟踪</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="shell">
+        <div class="contact-card reveal">
+          <div>
+            <h2>目标岗位：后端开发 / AI 应用落地开发</h2>
+            <p>期望城市杭州。希望加入需要真实业务理解、工程落地能力和 AI 应用探索精神的团队。</p>
+            <div class="hero-row">
+              <a class="primary-button" href="mailto:wackyx0107@gmail.com">发邮件</a>
+              <a class="ghost-button" href="tel:19357084608">打电话</a>
+            </div>
+          </div>
+          <div class="contact-box">
+            <span>王欣</span>
+            <a href="tel:19357084608">19357084608</a>
+            <a href="mailto:wackyx0107@gmail.com">wackyx0107@gmail.com</a>
+            <span>本科 / 软件工程 / 2018</span>
+            <span>CET-4</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">Built as a static interactive resume page. Ready for local preview or static deployment.</div>
+  </footer>
+
+  <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+
+    const root = document.body;
+    const themeToggle = document.getElementById("themeToggle");
+    const savedTheme = localStorage.getItem("resume-theme");
+    if (savedTheme === "light") root.classList.add("light");
+
+    themeToggle.addEventListener("click", () => {
+      root.classList.toggle("light");
+      localStorage.setItem("resume-theme", root.classList.contains("light") ? "light" : "dark");
+    });
+
+    const copyButton = document.getElementById("copyContact");
+    copyButton.addEventListener("click", async () => {
+      const text = "王欣 19357084608 wackyx0107@gmail.com";
+      try {
+        await navigator.clipboard.writeText(text);
+        copyButton.textContent = "已复制";
+        setTimeout(() => {
+          copyButton.textContent = "复制联系方式";
+        }, 1400);
+      } catch (error) {
+        copyButton.textContent = "复制失败";
+        setTimeout(() => {
+          copyButton.textContent = "复制联系方式";
+        }, 1400);
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll(".reveal").forEach((item, index) => {
+      item.style.transitionDelay = `${Math.min(index * 34, 220)}ms`;
+      observer.observe(item);
+    });
+
+    document.querySelectorAll(".metric, .tile, .job, .project, .tool, .contact-card").forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty("--mx", `${x}%`);
+        card.style.setProperty("--my", `${y}%`);
+      });
+    });
+
+    const canvas = document.getElementById("flowCanvas");
+    const ctx = canvas.getContext("2d");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const nodes = [
+      { label: "Enhance", x: 0.18, y: 0.24 },
+      { label: "Schema", x: 0.54, y: 0.18 },
+      { label: "NL2SQL", x: 0.78, y: 0.36 },
+      { label: "Guard", x: 0.36, y: 0.48 },
+      { label: "MCP", x: 0.64, y: 0.62 },
+      { label: "ECharts", x: 0.26, y: 0.72 }
+    ];
+    const edges = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [1, 4], [0, 3]];
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let frame = 0;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function drawNode(node, index, time) {
+      const x = node.x * width + Math.sin(time / 900 + index) * 8;
+      const y = node.y * height + Math.cos(time / 1000 + index) * 8;
+      const active = (Math.floor(time / 760) % nodes.length) === index;
+      const radius = active ? 42 : 34;
+
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = active ? "rgba(106, 167, 255, 0.16)" : "rgba(255, 255, 255, 0.04)";
+      ctx.fill();
+      ctx.strokeStyle = active ? "rgba(106, 167, 255, 0.7)" : "rgba(162, 196, 255, 0.16)";
+      ctx.lineWidth = active ? 1.6 : 1;
+      ctx.stroke();
+
+      ctx.font = "12px SFMono-Regular, Consolas, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--text").trim() || "#f4f7ff";
+      ctx.fillText(node.label, x, y);
+      return { x, y };
+    }
+
+    function draw(time = 0) {
+      frame = time;
+      ctx.clearRect(0, 0, width, height);
+      const points = nodes.map((node, index) => {
+        return {
+          x: node.x * width + Math.sin(time / 900 + index) * 8,
+          y: node.y * height + Math.cos(time / 1000 + index) * 8
+        };
+      });
+
+      edges.forEach(([from, to], index) => {
+        const a = points[from];
+        const b = points[to];
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = "rgba(162, 196, 255, 0.18)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        const progress = (time / 1400 + index * 0.18) % 1;
+        const px = a.x + (b.x - a.x) * progress;
+        const py = a.y + (b.y - a.y) * progress;
+        const trailX = a.x + (b.x - a.x) * Math.max(progress - 0.08, 0);
+        const trailY = a.y + (b.y - a.y) * Math.max(progress - 0.08, 0);
+        const packetGradient = ctx.createLinearGradient(trailX, trailY, px, py);
+        packetGradient.addColorStop(0, "rgba(106, 167, 255, 0)");
+        packetGradient.addColorStop(1, "rgba(106, 167, 255, 0.72)");
+        ctx.beginPath();
+        ctx.moveTo(trailX, trailY);
+        ctx.lineTo(px, py);
+        ctx.strokeStyle = packetGradient;
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(px, py, 3.4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(106, 167, 255, 0.78)";
+        ctx.fill();
+      });
+
+      nodes.forEach((node, index) => drawNode(node, index, time));
+
+      ctx.font = "11px SFMono-Regular, Consolas, monospace";
+      ctx.textAlign = "left";
+      ctx.fillStyle = "rgba(168, 199, 186, 0.72)";
+      const rows = ["SELECT only", "sync database", "sensitive fields filtered", "timeout fallback"];
+      rows.forEach((row, index) => {
+        ctx.fillText(`> ${row}`, 24, 74 + index * 20);
+      });
+
+      if (!reduceMotion) requestAnimationFrame(draw);
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      draw(frame);
+    });
+    draw();
+  </script>
+</body>
+</html>
